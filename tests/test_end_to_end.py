@@ -17,19 +17,16 @@ def driver():
     driver.quit()
 
 
-def close_popup_if_present(driver):
-    try:
-        # اگر iframe تبلیغاتی باز شده باشه، می‌بنده
-        driver.switch_to.frame("aswift_0")
-        driver.switch_to.frame("ad_iframe")
-        close_btn = driver.find_element(By.XPATH, "//div[@id='dismiss-button']")
-        close_btn.click()
-        driver.switch_to.default_content()
-        print(" Popup closed successfully!")
-    except Exception:
-        driver.switch_to.default_content()
-
-
+#def close_popup_if_present(driver):
+#    try:
+#        driver.switch_to.frame("aswift_0")
+#        driver.switch_to.frame("ad_iframe")
+#        close_btn = driver.find_element(By.XPATH, "//div[@id='dismiss-button']")
+#        close_btn.click()
+#        driver.switch_to.default_content()
+#        print(" Popup closed successfully!")
+#    except Exception:
+#        driver.switch_to.default_content()
 
 def test_end_to_end_user_flow(driver):
     wait = WebDriverWait(driver, 15)
@@ -48,9 +45,9 @@ def test_end_to_end_user_flow(driver):
     # Enter Account Information
     wait.until(EC.presence_of_element_located((By.XPATH, "//input[@id='id_gender2']"))).click()
     driver.find_element(By.ID, "password").send_keys("123456")
-    driver.find_element(By.ID, "days").send_keys("10")
+    driver.find_element(By.ID, "days").send_keys("01")
     driver.find_element(By.ID, "months").send_keys("May")
-    driver.find_element(By.ID, "years").send_keys("1996")
+    driver.find_element(By.ID, "years").send_keys("1990")
 
     driver.find_element(By.ID, "newsletter").click()
     driver.find_element(By.ID, "optin").click()
@@ -58,9 +55,9 @@ def test_end_to_end_user_flow(driver):
     driver.find_element(By.ID, "first_name").send_keys("Elahe")
     driver.find_element(By.ID, "last_name").send_keys("Motlagh")
     driver.find_element(By.ID, "address1").send_keys("Tehran, Iran")
-    driver.find_element(By.ID, "country").send_keys("Canada")
-    driver.find_element(By.ID, "state").send_keys("Ontario")
-    driver.find_element(By.ID, "city").send_keys("Toronto")
+    driver.find_element(By.ID, "country").send_keys("USA")
+    driver.find_element(By.ID, "state").send_keys("NewYork")
+    driver.find_element(By.ID, "city").send_keys("NewYork")
     driver.find_element(By.ID, "zipcode").send_keys("12345")
     driver.find_element(By.ID, "mobile_number").send_keys("09120000000")
 
@@ -69,18 +66,12 @@ def test_end_to_end_user_flow(driver):
     wait.until(EC.presence_of_element_located((By.XPATH, "//b[text()='Account Created!']")))
     driver.find_element(By.XPATH, "//a[@data-qa='continue-button']").click()
 
-    # Sometimes pop-up ad appears after signup
-    #driver.get("https://automationexercise.com/")
-
-    close_popup_if_present(driver)
+    #close_popup_if_present(driver)
 
     # ====== Test Case 2: Login User with correct email and password ======
-    ################
-    #driver.find_element(By.LINK_TEXT, "Logout").click()
     driver.find_element(By.LINK_TEXT, "Logout").click()
     time.sleep(2)
-    #wait.until(EC.presence_of_element_located((By.XPATH, "//button[@data-qa='login-button']")))
-    ##############
+
     driver.find_element(By.LINK_TEXT, "Signup / Login").click()
 
     wait.until(EC.presence_of_element_located((By.XPATH, "//input[@data-qa='login-email']"))).send_keys(email)
@@ -91,7 +82,7 @@ def test_end_to_end_user_flow(driver):
     wait.until(EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Logged in as')]")))
 
     print("!LOGIN ANJAM SHOD!")
-    close_popup_if_present(driver)
+    #close_popup_if_present(driver)
 
     # ====== Test Case 12: Add Products in Cart ======
     actions = ActionChains(driver)
@@ -128,6 +119,7 @@ def test_end_to_end_user_flow(driver):
 
 
     # ====== Test Case 4: Logout User ======
+    time.sleep(2)
     driver.find_element(By.LINK_TEXT, "Logout").click()
     wait.until(EC.presence_of_element_located((By.XPATH, "//button[@data-qa='login-button']")))
 
