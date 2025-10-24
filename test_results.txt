@@ -1,0 +1,4 @@
+Test Case 1: Signup successful
+Test Case 2: Login successful
+Test Case 12: Products added to cart successfully
+Test Case 4: Logout successful

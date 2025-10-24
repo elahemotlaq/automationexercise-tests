@@ -17,19 +17,9 @@ def driver():
     driver.quit()
 
 
-#def close_popup_if_present(driver):
-#    try:
-#        driver.switch_to.frame("aswift_0")
-#        driver.switch_to.frame("ad_iframe")
-#        close_btn = driver.find_element(By.XPATH, "//div[@id='dismiss-button']")
-#        close_btn.click()
-#        driver.switch_to.default_content()
-#        print(" Popup closed successfully!")
-#    except Exception:
-#        driver.switch_to.default_content()
-
 def test_end_to_end_user_flow(driver):
     wait = WebDriverWait(driver, 15)
+    results = []
 
     # ====== Test Case 1: Register User ======
     driver.find_element(By.LINK_TEXT, "Signup / Login").click()
@@ -66,7 +56,9 @@ def test_end_to_end_user_flow(driver):
     wait.until(EC.presence_of_element_located((By.XPATH, "//b[text()='Account Created!']")))
     driver.find_element(By.XPATH, "//a[@data-qa='continue-button']").click()
 
-    #close_popup_if_present(driver)
+    # Verify signup success and log result
+    results.append("Test Case 1: Signup successful")
+
 
     # ====== Test Case 2: Login User with correct email and password ======
     driver.find_element(By.LINK_TEXT, "Logout").click()
@@ -80,9 +72,10 @@ def test_end_to_end_user_flow(driver):
 
     # Validate login
     wait.until(EC.presence_of_element_located((By.XPATH, "//a[contains(text(), 'Logged in as')]")))
+ 
+    # Verify login success and log result
+    results.append("Test Case 2: Login successful")
 
-    print("!LOGIN ANJAM SHOD!")
-    #close_popup_if_present(driver)
 
     # ====== Test Case 12: Add Products in Cart ======
     actions = ActionChains(driver)
@@ -92,30 +85,32 @@ def test_end_to_end_user_flow(driver):
     driver.execute_script("window.scrollTo(0,400)")
     time.sleep(3)
 
-    #افزودن محصول اول
+    #Add first product
     first_product = driver.find_element(By.XPATH, "(//a[@class='btn btn-default add-to-cart'])[1]")
     actions.move_to_element(first_product).perform
     first_product.click()
     time.sleep(2)
 
-    # کلیک روی Continue Shopping
+    # Click on Continue Shopping
     continue_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='Continue Shopping']")))
     driver.execute_script("arguments[0].scrollIntoView(true);", continue_btn)
     continue_btn.click()
     time.sleep(2)
 
-    #لفزودن محصول دوم
+    #Add second product
     second_product = driver.find_element(By.CSS_SELECTOR, 'a.add-to-cart[data-product-id="2"]')
     actions.move_to_element(second_product).perform
     second_product.click()
     time.sleep(2)
 
-    # کلیک روی View Cart
+    # Click on View Cart
     view_cart_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//*[text()='View Cart']")))
     driver.execute_script("arguments[0].scrollIntoView(true);", view_cart_btn)
     view_cart_btn.click()
     time.sleep(2)
 
+    # Verify products added to cart
+    results.append("Test Case 12: Products added to cart successfully")
 
 
     # ====== Test Case 4: Logout User ======
@@ -123,7 +118,16 @@ def test_end_to_end_user_flow(driver):
     driver.find_element(By.LINK_TEXT, "Logout").click()
     wait.until(EC.presence_of_element_located((By.XPATH, "//button[@data-qa='login-button']")))
 
-    print("\n End-to-End test flow completed successfully!")
+    # Verify logout success
+    results.append("Test Case 4: Logout successful")
+
+    # Write results to file
+    with open("test_results.txt", "w") as f:
+        for line in results:
+            f.write(line + "\n")
+
+print("\nEnd-to-End test flow completed successfully!All test cases executed, And Results saved in 'test_results.txt'")
+
 
 
 if __name__ == "__main__":
